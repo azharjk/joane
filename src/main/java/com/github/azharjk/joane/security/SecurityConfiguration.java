@@ -27,7 +27,8 @@ public class SecurityConfiguration {
       .csrf().disable()
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
       .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-      .authorizeHttpRequests().requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+      .authorizeHttpRequests()
+      .requestMatchers("/api/login").permitAll()
       .anyRequest().authenticated().and()
       .build();
   }

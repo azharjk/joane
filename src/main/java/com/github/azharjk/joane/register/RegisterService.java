@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.github.azharjk.joane.auth.AuthResponse;
 import com.github.azharjk.joane.auth.AuthService;
+import com.github.azharjk.joane.exception.EmailAlreadyRegisteredException;
 import com.github.azharjk.joane.users.User;
 import com.github.azharjk.joane.users.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +23,7 @@ public class RegisterService {
   public AuthResponse register(RegisterBody registerBody) {
     Optional<User> optUser = userRepository.findByEmail(registerBody.getEmail());
     if (optUser.isPresent()) {
-      // TODO: Throw custom exception instead
-      throw new RuntimeException("Email is already registered");
+      throw new EmailAlreadyRegisteredException();
     }
 
     User user = new User(registerBody.getEmail(), passwordEncoder.encode(registerBody.getPassword()));

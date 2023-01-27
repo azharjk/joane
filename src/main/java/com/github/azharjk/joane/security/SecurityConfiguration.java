@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -27,7 +29,7 @@ public class SecurityConfiguration {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
       .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
       .authorizeHttpRequests()
-      .requestMatchers("/api/login").permitAll()
+      .requestMatchers("/api/login", "/api/register").permitAll()
       .anyRequest().authenticated().and()
       .build();
   }
@@ -38,6 +40,11 @@ public class SecurityConfiguration {
   }
 
   @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
   public JwtEncoder jwtEncoder(RSAKeyService rsaKeyService) {
     JWKSet jwkSet = new JWKSet(rsaKeyService.getKey());
     ImmutableJWKSet<SecurityContext> immutableJWKSet = new ImmutableJWKSet<>(jwkSet);
@@ -45,7 +52,7 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  public JwtDecoder jwtDecoder(RSAKeyService rsaKeyService)throws JOSEException {
+  public JwtDecoder jwtDecoder(RSAKeyService rsaKeyService) throws JOSEException {
     return NimbusJwtDecoder.withPublicKey((RSAPublicKey) rsaKeyService.getKey().toPublicKey()).build();
   }
 }

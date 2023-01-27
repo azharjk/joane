@@ -1,15 +1,22 @@
 package com.github.azharjk.joane.auth;
 
-import com.github.azharjk.joane.users.User;
-import com.github.azharjk.joane.users.UserRepository;
-
+import java.time.Instant;
 import java.util.Optional;
 
-public class AuthService {
-  private UserRepository userRepository;
+import com.github.azharjk.joane.users.User;
+import com.github.azharjk.joane.users.UserRepository;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
-  public AuthService(UserRepository userRepository) {
+public class AuthService {
+  private static final Long TWO_MINUTES_IN_SECONDS = 120L;
+  private final UserRepository userRepository;
+  private final JwtEncoder jwtEncoder;
+
+  public AuthService(UserRepository userRepository, JwtEncoder jwtEncoder) {
     this.userRepository = userRepository;
+    this.jwtEncoder = jwtEncoder;
   }
 
   public Attempt attempt(String email, String password) {
@@ -25,5 +32,17 @@ public class AuthService {
     }
 
     return new Attempt(false, null);
+  }
+
+  public String createJwtAccessToken(User user) {
+    Instant expiresAt = Instant.now().plusSeconds(TWO_MINUTES_IN_SECONDS);
+
+    JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
+      .subject(user.getId().toString())
+      .claim("email", user.getEmail())
+      .expiresAt(expiresAt)
+      .build();
+
+    return jwtEncoder.encode(JwtEncoderParameters.from(jwtClaimsSet)).getTokenValue();
   }
 }

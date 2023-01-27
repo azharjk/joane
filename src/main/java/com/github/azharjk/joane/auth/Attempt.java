@@ -1,20 +1,21 @@
 package com.github.azharjk.joane.auth;
 
+import com.github.azharjk.joane.users.User;
+
 public class Attempt {
   private final boolean success;
-  // TODO: This thing should be the user object
-  private final String email;
+  private final User user;
 
-  public Attempt(boolean success, String email) {
+  public Attempt(boolean success, User user) {
     this.success = success;
-    this.email = email;
+    this.user = user;
   }
 
   public boolean isSuccess() {
     return success;
   }
 
-  public String getEmail() {
-    return email;
+  public User getUser() {
+    return user;
   }
 }

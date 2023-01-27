@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import com.github.azharjk.joane.auth.Attempt;
 import com.github.azharjk.joane.auth.AuthService;
+import com.github.azharjk.joane.users.User;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -25,8 +26,11 @@ public class LoginService {
       throw new BadCredentialsException("Bad credentials");
     }
 
+    User user = attempt.getUser();
+
     JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
-      .claim("email", attempt.getEmail())
+      .subject(user.getId().toString())
+      .claim("email", user.getEmail())
       .expiresAt(Instant.now().plusSeconds(TWO_MIN_IN_SEC))
       .build();
 

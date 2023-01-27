@@ -1,5 +1,6 @@
 package com.github.azharjk.joane.login;
 
+import com.github.azharjk.joane.auth.AuthResponse;
 import com.github.azharjk.joane.utils.JoaneResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public class LoginController {
   }
 
   @PostMapping
-  public JoaneResponse<Void, LoginResponse> login(@RequestBody @Valid LoginBody body) {
+  public JoaneResponse<Void, AuthResponse> login(@RequestBody @Valid LoginBody body) {
     return new JoaneResponse<>(null, loginService.login(body));
   }
 }

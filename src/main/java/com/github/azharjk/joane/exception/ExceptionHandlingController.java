@@ -18,7 +18,7 @@ public class ExceptionHandlingController {
 
   @ResponseStatus(HttpStatus.OK)
   @ExceptionHandler({BadCredentialsException.class, EmailAlreadyRegisteredException.class})
-  public JoaneResponse<String, Void> badCredentialsException(RuntimeException ex) {
+  public JoaneResponse<String, Void> authException(RuntimeException ex) {
     return new JoaneResponse<>(ex.getMessage(), null);
   }
 }

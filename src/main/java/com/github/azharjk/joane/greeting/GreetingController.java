@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/greeting")
 public class GreetingController {
+  private final GreetingService greetingService;
+
+  public GreetingController(GreetingService greetingService) {
+    this.greetingService = greetingService;
+  }
+
   @PreAuthorize("hasAuthority('SCOPE_read')")
   @GetMapping
   public JoaneResponse<Void, String> greeting(@AuthenticationPrincipal Jwt jwt) {
-    String email = jwt.getClaimAsString("email");
-    return new JoaneResponse<>(null, "Hello %s, from Joane".formatted(email));
+    return new JoaneResponse<>(null, greetingService.greeting(jwt));
   }
 }

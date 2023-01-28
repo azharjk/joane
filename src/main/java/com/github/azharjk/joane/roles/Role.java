@@ -10,6 +10,7 @@ import jakarta.persistence.EnumType;
 @Table(name = "roles")
 public class Role {
   public static final Long READ_ID = 1L;
+  public static final Long WRITE_ID = 2L;
   @Id
   private Long id;
   @Enumerated(EnumType.STRING)

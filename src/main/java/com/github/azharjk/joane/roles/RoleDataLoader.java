@@ -15,5 +15,6 @@ public class RoleDataLoader implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments args) throws Exception {
     roleRepository.save(new Role(Role.READ_ID, RoleType.READ));
+    roleRepository.save(new Role(Role.WRITE_ID, RoleType.WRITE));
   }
 }

@@ -1,10 +1,14 @@
 package com.github.azharjk.joane.users;
 
+import java.util.Set;
+
+import com.github.azharjk.joane.roles.Role;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +18,8 @@ public class User {
   private Long id;
   private String email;
   private String password;
+  @ManyToMany
+  private Set<Role> roles;
 
   public User() {
   }
@@ -45,5 +51,13 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 }

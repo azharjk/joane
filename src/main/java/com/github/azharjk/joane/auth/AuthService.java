@@ -40,9 +40,12 @@ public class AuthService {
   public String createJwtAccessToken(User user) {
     Instant expiresAt = Instant.now().plusSeconds(TWO_MINUTES_IN_SECONDS);
 
+    String roles = String.join(" ", user.getRoles().stream().map(role -> role.getType().toString()).toList());
+
     JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
       .subject(user.getId().toString())
       .claim("email", user.getEmail())
+      .claim("scope", roles)
       .expiresAt(expiresAt)
       .build();
 

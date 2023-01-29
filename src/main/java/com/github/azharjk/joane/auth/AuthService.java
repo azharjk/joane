@@ -1,6 +1,7 @@
 package com.github.azharjk.joane.auth;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import com.github.azharjk.joane.users.User;
@@ -40,7 +41,7 @@ public class AuthService {
   public String createJwtAccessToken(User user) {
     Instant expiresAt = Instant.now().plusSeconds(TWO_MINUTES_IN_SECONDS);
 
-    String roles = String.join(" ", user.getRoles().stream().map(role -> role.getType().toString()).toList());
+    String roles = String.join(" ", List.of("read"));
 
     JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
       .subject(user.getId().toString())

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import com.github.azharjk.joane.roles.Role;
 import com.github.azharjk.joane.users.User;
 import com.github.azharjk.joane.users.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,15 +39,18 @@ public class AuthService {
     return new Attempt(false, null);
   }
 
+  // NOTE: Our scope doesn't really do anything
   public String createJwtAccessToken(User user) {
+    Instant issuedAt = Instant.now();
     Instant expiresAt = Instant.now().plusSeconds(TWO_MINUTES_IN_SECONDS);
 
-    String roles = String.join(" ", List.of("read"));
+    String roles = String.join(" ", List.of(Role.READ, Role.WRITE));
 
     JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
       .subject(user.getId().toString())
       .claim("email", user.getEmail())
       .claim("scope", roles)
+      .issuedAt(issuedAt)
       .expiresAt(expiresAt)
       .build();
 
